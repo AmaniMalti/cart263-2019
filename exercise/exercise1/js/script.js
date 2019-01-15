@@ -12,7 +12,9 @@ to overlap another circle (food) in order to grow bigger.
 
 // Constants defining key quantities
 const AVATAR_SIZE_GAIN = 50;
-const AVATAR_SIZE_LOSS = 1;
+const AVATAR_SIZE_LOSS = 0.5;
+// Constant for food - MAX SPEED
+const MAX_SPEED_FOOD = 5;
 
 // Avatar is an object defined by its properties
 let avatar = {
@@ -29,12 +31,14 @@ let food = {
   x: 0,
   y: 0,
   size: 64,
-  vx: 5,
   color: '#55cccc',
+  // Give the food object velocity properties
+  vx: 3,
+  vy: 3,
+  // Give the food a maximum speed property (consider defining this value in a constant separately)
+  maxSpeed: MAX_SPEED_FOOD,
 }
-  //Constant for food
-  //New
-  const maxSpeedFood = 10;
+
 
 
 // setup()
@@ -65,10 +69,12 @@ function draw() {
   updateAvatar();
   checkCollision();
   displayAvatar();
-  //New
-  updateFood();
   displayFood();
-  setTimeout();
+  // Call updateFood() from draw()
+  updateFood();
+
+  // Check avatar size - returns game over when equal to zero
+  gameOver();
 }
 
 // updateAvatar()
@@ -131,10 +137,29 @@ function displayFood() {
 function positionFood() {
   food.x = random(0,width);
   food.y = random(0,height);
+
+  // Set a random velocity for the food based on its maximum speed in positionFood()
+  food.vx = random(-food.maxSpeed, food.maxSpeed);
+  food.vy = random(-food.maxSpeed, food.maxSpeed);
 }
 
-function updateFood(){
-  food.maxSpeed = constrain(-maxSpeedFood,maxSpeedFood);
+function updateFood() {
+  // updates the food object's position based on its velocity, constrained to the canvas (it shouldn't go off-screen)
+  food.x = constrain(food.x + food.vx, 0 + food.size/2, width - food.size/2);
+  food.y = constrain(food.y + food.vy, 0 + food.size/2, height - food.size/2);
+
+  if (random() % 2 === 0) {
+    food.vx = random(-food.maxSpeed, food.maxSpeed);
+    food.vy = random(-food.maxSpeed, food.maxSpeed);
+  }
 }
 
-  setTimeout(function(){ alert("Hello"); }, 3000);
+function gameOver() {
+  if (avatar.size === 0) {
+    textSize(20);
+    textSize(30);
+    textAlign(CENTER);
+    fill(255);
+    text("GAME OVER", width / 2, height / 2);
+  }
+}
