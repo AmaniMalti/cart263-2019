@@ -51,8 +51,7 @@ function found() {
   $(this).off();
   $secretCount++;
   $("span#secret-count").text($secretCount);
-  if ($secretCount >= 8) {
-    countFinished();
+
   }
 }
 // update()
