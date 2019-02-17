@@ -17,10 +17,12 @@ Chewing: https://freesound.org/people/InspectorJ/sounds/412068/
 // Sound effects for the experience
 let buzzSFX = new Audio("assets/sounds/buzz.mp3");
 let crunchSFX = new Audio("assets/sounds/crunch.wav");
+let yakSFX = new Audio("assets/sounds/yak.wav");
 
 // Variable to hold our two key elements
 let $mouth;
 let $fly;
+let $nigiri;
 
 $(document).ready(setup);
 
@@ -42,7 +44,6 @@ function setup() {
   buzzSFX.loop = true;
   buzzSFX.play();
 }
-
 // flyDropped(event,ui)
 //
 // Called when a draggable element is dragged over the droppable element (the mouth)
@@ -65,7 +66,11 @@ function flyDropped (event,ui) {
   // Use a setInterval to call the chew() function over and over
   setInterval(chew,250);
 }
-
+function nigiriDropped (event,ui){
+  $($nigiri).draggable({
+    revert:true,
+  });
+}
 // chew()
 //
 // Swaps the mouth image between closed and open and plays the crunching SFX
