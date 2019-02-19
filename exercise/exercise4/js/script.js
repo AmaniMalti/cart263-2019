@@ -32,13 +32,30 @@ function setup() {
   // Make it droppable
   $mouth.droppable({
     // The drop option specifies a function to call when a drop is completed
-    drop: flyDropped
+    drop: flyDropped,
+    accept: '#fly'
   });
 
   // Get the fly element from the page
   $fly = $('#fly');
   // Make it draggable
   $fly.draggable();
+
+  // Get the fly element from the page
+  $nigiri = $('#nigiri');
+  // Make it draggable
+  $nigiri.draggable({
+    revert: true,
+    start: function (event, ui){
+   $mouth.attr('src','assets/images/mouth-closed.png');
+    yakSFX.play()
+    },
+    stop: function (event, ui){
+  // this opens the mouth again
+  $mouth.attr('src', 'assets/images/mouth-closed.png');
+}
+  }
+);
 
   // Start up the buzzing of the fly
   buzzSFX.loop = true;
@@ -66,11 +83,7 @@ function flyDropped (event,ui) {
   // Use a setInterval to call the chew() function over and over
   setInterval(chew,250);
 }
-function nigiriDropped (event,ui){
-  $($nigiri).draggable({
-    revert:true,
-  });
-}
+
 // chew()
 //
 // Swaps the mouth image between closed and open and plays the crunching SFX
