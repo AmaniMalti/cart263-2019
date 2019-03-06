@@ -162,6 +162,10 @@ let animals = [
 let correctAnimal;
 // We also track all the possibly answers (mostly so we can switch their order around)
 let answers = [];
+let myGuesses = [];
+let correctGuess;
+let scoreCount = 0;
+let $score;
 
 // How many possible answers there are per round
 const NUM_OPTIONS = 5;
@@ -175,6 +179,7 @@ $(document).ready(setup);
 // to actually start the game.
 function setup() {
   $('#click-to-begin').on('click',startGame);
+  $score = $('#score');
 }
 
 // startGame()
@@ -182,9 +187,63 @@ function setup() {
 // Remove the click to begin and set up a round of play
 function startGame() {
   $('#click-to-begin').remove();
-
   newRound();
-}
+  // Make sure annyang is available...
+  if (annyang) {
+
+    // Add the commands to annyang. That is it should listen
+    // for "I am..." or "I'm..." followed by some number of words.
+    // In annyang's commands an asterisk (*) followed by a
+    // variable names means that annyang will call the function
+    // specified with EVERYTHING it heard from that point on...
+    var command = {
+        "I give up": function() {
+          console.log('i give up');
+          // Score = 0, shake the correct answer and then generate a new round
+          scoreCount = 0;
+          $score.text('Score : ' +scoreCount);
+          //
+          $('.guess').each(function(){
+            if ($(this).text() === correctAnimal){
+              $(this).effect('shake');
+            }
+          })
+          $('.guess').remove();
+          setTimeout(newRound, 1000);
+        },
+
+        "Say it again": function(){
+          //speakAnimal(correctAnimal);
+          console.log('say it again')
+          // Ask to hear the (reversed) name of the animal again
+          speakAnimal(correctAnimal);
+        },
+
+        "I think it is *guess": function(guess){
+          // Score++, new round
+          if (guess === correctAnimal) {
+          scoreCount++;
+          $score.text('Score : ' +scoreCount);
+          $('.guess').remove();
+          setTimeout(newRound, 1000);
+        }
+          //else wrong, new round
+            else {
+              speakAnimal(correctAnimal);
+              scoreCount = 0;
+              $score.text('Score : ' +scoreCount);
+            }
+
+        }
+      }
+    };
+
+    // Add our commands to annyang
+    annyang.addCommands(command);
+
+    // Start listening. You can call this here, or attach this call to an event, button, etc.
+    annyang.start();
+  }
 
 // newRound()
 //
@@ -197,18 +256,25 @@ function newRound() {
   for (let i = 0; i < NUM_OPTIONS; i++) {
     // Choose the answer text randomly from the animals array
     let answer = animals[Math.floor(Math.random() * animals.length)];
+	let myGuess = "I think it is a " + answer;
+	console.log(myGuess);
     // Add a button with this label
     addButton(answer);
     // Add this answer to the answers array
     answers.push(answer);
+	  myGuesses.push(myGuess);
   }
 
   // Choose a random answer from the answers as our correct answer
   correctAnimal = answers[Math.floor(Math.random() * answers.length)];
+  correctGuess = "I think it is a " + correctAnimal;
+  console.log(correctGuess);
 
   // Say the name of the animal
   speakAnimal(correctAnimal);
+
 }
+
 
 // speakAnimal(name)
 //
