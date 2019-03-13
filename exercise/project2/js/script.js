@@ -2,10 +2,11 @@
 
 /*****************
 
-Title of Project
-Author Name
+Baby shark
+Amani Malti
 
-This is a template. You must fill in the title,
-author, and this description to match your project!
+A traumatising game for kids 1year to 4 year.
+Shark is waiting for the baby to get to the bottom to eat it.
+Needs to shout Stop to stop the shark from eating the baby.
 
 ******************/
