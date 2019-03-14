@@ -24,19 +24,39 @@ $(document).ready(setup);
 
 function setup() {
 
-  //Placing baby position on the Y axis
+  //Placing baby position on the X axis to animate the baby
   function animateBabyX(xPosition) {
     $('#baby').animate({
       left: '+=' + xPosition + 'px'
     });
 
   };
-  // Placing baby position on the Y axis
+  // Placing baby position on the Y axis to animate the baby
   function animateBabyY(yPosition) {
     $('#baby').animate({
       top: yPosition + 'px'
     });
   };
+  // Placing the shark on the X axis to animate the shark
+  // Making the shark follow the baby movement on the X axis
+  function animateShark(xPosition) {
+    $('#shark').animate({
+      left: '+=' + xPosition + 'px'
+    });
+  };
+  // Making a function to the positioning of the animation to the X axis set as random
+  // Making the images not go over the document width
+  function generateRandomXPosition() {
+    return Math.floor(Math.random() * $(document).width() - 30);
+  };
+  // Making the positioning of the animation to the Y axis set as random
+  function generateRandomYPosition() {
+    return Math.floor(Math.random() * $(document).height());
+  }
+  // Using the function generateRandomXPosition to generate the position of the baby and the shark randomly on the X axis
+  var babyXPosition = generateRandomXPosition();
+  animateBabyX(babyXPosition);
+  animateShark(babyXPosition);
 };
 
 
