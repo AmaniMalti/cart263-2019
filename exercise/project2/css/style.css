@@ -13,15 +13,6 @@ body {
   padding: 0;
 }
 
-#score {
-	font-family: "futura";
-  color: white;
-  font-size: 20px;
-  text-align: left;
-	margin-top: 10px;
-	margin-left: 10px;
-}
-
 #instruction {
 	font-family: "futura";
   color: white;
@@ -34,21 +25,26 @@ body {
 #baby {
 	position: absolute;
   top: 35px;
+	z-index: 3;
 }
 
 #shark {
   position: absolute;
   bottom: 0px;
+	display: none;
+	z-index: 2;
 }
 
 #hungryShark {
   position: absolute;
   bottom: 0px;
-  visibility: hidden;
+	display: none;
+	z-index: 2;
 }
 
 #sharkEat {
   position: absolute;
   bottom: 0px;
-  visibility: hidden;
+	display: none;
+	z-index: 2;
 }
