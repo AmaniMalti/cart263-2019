@@ -20,8 +20,11 @@ let hungryShark;
 let sharkEat;
 let baby;
 
-// Adding a constant for the baby height animation on the Y axis
-const height = 420;
+// more variables to calculate width and height of elements
+  let babyHeight = $('#baby').height();
+  let sharkHeight = $('#shark').height();
+  let windowHeight = $( document ).height();
+  let windowWidth = $( document ).width();
 
 $(document).ready(setup);
 
@@ -63,13 +66,3 @@ function setup() {
   // animate the baby to move down on the Y axis
   animateBabyY(height);
 };
-
-
-//song is playing during the whole game
-let playbabySong = video.play()
-if (playbabySong!== undefined){
-  playbabySong.then(_=> {
-  })
-  .catch(error=>{
-    });
-  }
