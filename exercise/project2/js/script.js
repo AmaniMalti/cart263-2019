@@ -24,7 +24,22 @@ $(document).ready(setup);
 
 function setup() {
 
-}
+  //Placing baby position on the Y axis
+  function animateBabyX(xPosition) {
+    $('#baby').animate({
+      left: '+=' + xPosition + 'px'
+    });
+
+  };
+  // Placing baby position on the Y axis
+  function animateBabyY(yPosition) {
+    $('#baby').animate({
+      top: yPosition + 'px'
+    });
+  };
+};
+
+
 //song is playing during the whole game
 babySong.loop = true;
 babySong.play();
