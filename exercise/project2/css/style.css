@@ -46,3 +46,9 @@ body {
   bottom: 0px;
   visibility: hidden;
 }
+
+#sharkEat {
+  position: absolute;
+  bottom: 0px;
+  visibility: hidden;
+}
