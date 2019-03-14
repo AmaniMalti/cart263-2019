@@ -20,6 +20,9 @@ let hungryShark;
 let sharkEat;
 let baby;
 
+// Adding a constant for the baby height animation on the Y axis 
+const height = 420;
+
 $(document).ready(setup);
 
 function setup() {
@@ -57,6 +60,8 @@ function setup() {
   var babyXPosition = generateRandomXPosition();
   animateBabyX(babyXPosition);
   animateShark(babyXPosition);
+  // animate the baby to move down on the Y axis
+  animateBabyY(height);
 };
 
 
