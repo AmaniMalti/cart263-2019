@@ -11,58 +11,93 @@ Needs to shout Stop to stop the shark from eating the baby.
 
 ******************/
 
+$(document).ready(setup);
 // Sound effects for the experience
 let babySong = new Audio("assets/sounds/babyshark.mp3");
 
-// adding variables
-let shark;
-let hungryShark;
-let sharkEat;
-let baby;
+// song is playing during the whole game
+babySong.loop = true;
+let songPlay = babySong.play();
+if (songPlay !== undefined) {
+    songPlay.then(_ => {
 
-// more variables to calculate width and height of elements
+    })
+    .catch(error => {
+      console.log('Could not play song');
+    });
+  }
+
+function setup() {
+
+  // adding variables
+  let shark = $('#shark');
+  let hungryShark = $('#hungryShark');
+  let sharkEat = $('#sharkEat')
+  let baby = $('#baby');
+
+  // more variables to calculate width and height of elements
   let babyHeight = $('#baby').height();
   let sharkHeight = $('#shark').height();
   let windowHeight = $( document ).height();
   let windowWidth = $( document ).width();
 
-$(document).ready(setup);
-
-function setup() {
-
-  //Placing baby position on the X axis to animate the baby
-  function animateBabyX(xPosition) {
-    $('#baby').animate({
-      left: '+=' + xPosition + 'px'
-    });
-
+  // position the baby horizontally
+  function setupBabyX(xPosition){
+    baby.css({'left': xPosition +'px'});
   };
-  // Placing baby position on the Y axis to animate the baby
-  function animateBabyY(yPosition) {
-    $('#baby').animate({
-      top: yPosition + 'px'
-    });
+
+  // animate the movement of the baby vertically
+  function animateBabyY(yPosition){
+    baby.animate({top: yPosition + 'px' }, {easing: 'swing', duration: 2500,  complete: function() {animateSharkEatsBaby(yPosition, babyHeight, sharkHeight)}})
   };
-  // Placing the shark on the X axis to animate the shark
-  // Making the shark follow the baby movement on the X axis
+
+  // animate the shark movement along the x position
   function animateShark(xPosition) {
-    $('#shark').animate({
-      left: '+=' + xPosition + 'px'
-    });
+    shark.animate({left: xPosition +'px'}, 2000);
   };
-  // Making a function to the positioning of the animation to the X axis set as random
-  // Making the images not go over the document width
+
+  // generate a random number along the width of the page for the horizontal positioning
   function generateRandomXPosition() {
-    return Math.floor(Math.random() * $(document).width() - 30);
+   return Math.floor(Math.random() * windowWidth - 30);
   };
-  // Making the positioning of the animation to the Y axis set as random
+
+  // generate a random number along the height of the page for the vertical positioning
   function generateRandomYPosition() {
-    return Math.floor(Math.random() * $(document).height());
+   return Math.floor(Math.random() * windowHeight);
   }
-  // Using the function generateRandomXPosition to generate the position of the baby and the shark randomly on the X axis
+
+  // calculate height of baby element
+  function getBabyHeight() {
+    return baby.css('top');
+  }
+
+  // animate the shark eating baby
+  function animateSharkEatsBaby(yPosition, babyHeight, sharkHeight) {
+    shark.hide();
+      hungryShark.css('left', shark.css('left'));
+      hungryShark.show();
+      baby.animate({top: yPosition + 'px' }, {easing: 'swing', duration: 1500,  complete: function() {animateSharkAteBaby(yPosition, babyHeight, sharkHeight)}});
+  }
+
+  // animate shark opening mouth and baby dropping into shark's mouth
+  function animateSharkAteBaby(yPosition, babyHeight, sharkHeight) {
+    baby.animate({top: yPosition + babyHeight * 2 + 'px'}, {easing: 'swing', duration: 500,  complete: function() {animateBabyEaten()}});
+  }
+
+  // transition to baby eaten image
+  function animateBabyEaten() {
+    hungryShark.hide();
+    sharkEat.css('left', hungryShark.css('left'));
+    baby.hide();
+    sharkEat.show();
+  }
+
+  // generate a horizontal position for the baby
   var babyXPosition = generateRandomXPosition();
-  animateBabyX(babyXPosition);
+  // set the baby horizontal position
+  setupBabyX(babyXPosition);
+  // animate movement of shark to horizontal position
   animateShark(babyXPosition);
-  // animate the baby to move down on the Y axis
-  animateBabyY(height);
-};
+  // animate baby dropping to meet the shark vertically
+  animateBabyY(windowHeight - sharkHeight - babyHeight);
+ };
