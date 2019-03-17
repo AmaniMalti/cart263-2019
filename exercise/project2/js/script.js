@@ -13,6 +13,7 @@ Needs to shout Stop to stop the shark from eating the baby.
 
 // Sound effects for the experience
 let babySong = new Audio("assets/sounds/babyshark.mp3");
+let babyLaugh = new Audio("assets/sounds/babyLaugh.mp3");
 
 // adding variables
 	let shark;
@@ -20,6 +21,7 @@ let babySong = new Audio("assets/sounds/babyshark.mp3");
 	let sharkEat;
 	let baby;
 	let saveBaby;
+  let gameReplay;
 
 $(document).ready(function() {
 	// more variables to calculate width and height of elements
@@ -67,6 +69,7 @@ $(document).ready(function() {
 		console.log("SHARK ATE THE BABY!!!");
 		$('#baby').animate({top: yPosition + babyHeight * 2 + 'px'}, {easing: 'swing', duration: 500,  complete: function() {animateBabyEaten()}});
 	  }
+    // stop shark from eating the baby
 	  else {
 		 console.log("BABY SAVED!!!");
 		 $('#hungryShark').hide();
@@ -86,6 +89,7 @@ $(document).ready(function() {
 		var command = {
 		'stop': function() {
 		saveBaby = true;
+    babyLaugh.play();
 			}
 		};
 		 annyang.addCommands(command);
