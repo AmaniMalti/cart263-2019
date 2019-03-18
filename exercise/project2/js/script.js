@@ -11,9 +11,6 @@ Needs to shout Stop to stop the shark from eating the baby.
 
 ******************/
 
-// Sound effects for the experience
-let babySong = new Audio("assets/sounds/babyshark.mp3");
-let babyLaugh = new Audio("assets/sounds/babyLaugh.mp3");
 
 // adding variables
 	let shark;
@@ -21,15 +18,33 @@ let babyLaugh = new Audio("assets/sounds/babyLaugh.mp3");
 	let sharkEat;
 	let baby;
 	let saveBaby;
-  let gameReplay;
 
 $(document).ready(function() {
-	// more variables to calculate width and height of elements
-	let babyHeight = $('#baby').height();
-    let sharkHeight = $('#shark').height();
-    let windowHeight = $( document ).height();
-    let windowWidth = $( document ).width();
+  // Sound effects for the experience
+  let babySong = new Audio("assets/sounds/babyshark.mp3");
+  let babyLaugh = new Audio("assets/sounds/babyLaugh.mp3");
 
+
+  // song is playing during the whole game
+  babySong.loop = true;
+  babySong.play();
+
+  $('#btnStart').show().css("display","inline-block");
+
+});
+
+//
+function start() {
+	// more variables to calculate width and height of elements
+  let babyHeight = $('#baby').height();
+  let sharkHeight = $('#shark').height();
+  let windowHeight = $( document ).height();
+  let windowWidth = $( document ).width();
+
+  $('#btnStart').hide();
+  $('#sharkEat').removeAttr('style');
+  $('#baby').show();
+  $('#shark').show();
 
 	// function to position the baby horizontally
   function setupBabyX(xPosition){
@@ -66,14 +81,17 @@ $(document).ready(function() {
   function animateSharkAteBaby(yPosition, babyHeight, sharkHeight) {
 	  console.log(saveBaby);
 	  if (!saveBaby) {
-		console.log("SHARK ATE THE BABY!!!");
-		$('#baby').animate({top: yPosition + babyHeight * 2 + 'px'}, {easing: 'swing', duration: 500,  complete: function() {animateBabyEaten()}});
-	  }
+		$('#baby').animate({top: yPosition + babyHeight * 2 + 'px'}, {easing: 'swing', duration: 500,  complete: function() {animateBabyEaten(); $(this).removeAttr('style'); $('#shark').removeAttr('style'); $(this).hide(); $('#shark').hide();}});
+    }
     // stop shark from eating the baby
 	  else {
-		 console.log("BABY SAVED!!!");
 		 $('#hungryShark').hide();
+     $('#baby').removeAttr('style');
+     $('#shark').removeAttr('style');
+     $('#baby').hide();
+     $('#shark').hide();
 	  }
+    $('#btnReplay').show().css("display","inline-block");
   }
 	// transition to baby eaten image
   function animateBabyEaten() {
@@ -104,9 +122,9 @@ $(document).ready(function() {
 		// animate baby dropping to meet the shark vertically
     animateBabyY(windowHeight - sharkHeight - babyHeight);
 	}
- });
+}
 
-
-		// song is playing during the whole game
-		babySong.loop = true;
-		babySong.play();
+function replay() {
+  $('#btnReplay').hide();
+  start();
+}
