@@ -29,6 +29,7 @@ $(document).ready(function() {
   babySong.loop = true;
   babySong.play();
 
+  // Adding start button
   $('#btnStart').show().css("display","inline-block");
 
 });
@@ -123,7 +124,7 @@ function start() {
     animateBabyY(windowHeight - sharkHeight - babyHeight);
 	}
 }
-
+// Replaying the game by clicking on the button
 function replay() {
   $('#btnReplay').hide();
   start();
