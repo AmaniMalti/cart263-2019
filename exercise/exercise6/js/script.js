@@ -29,11 +29,13 @@ $(document).ready(function() {
   $.getJSON('data/data.json', gotData);
 });
 
+
 // gotData (data)
 //
 // This function gets called by getJSON when the data has been loaded.
 // The data itself will be in the 'data' argument as a JavaScript object.
 function gotData(data) {
+  $('body').empty();
   // Now we select random elements from the three arrays inside
   // our JSON to get a random condiment, cat, and room. Then we add those
   // words onto our page by setting the text of the appropriate span.
@@ -48,20 +50,32 @@ function gotData(data) {
     // If so, assume it's plural (this is a flawed assumption)
     verb = 'are';
   }
-
   // Now the cat
   let cat = getRandomElement(data.cats);
 
   // Same again for room
   let room = getRandomElement(data.rooms);
 
+  // Now the isms
+  let isms = getRandomElement(data.isms);
+  // adding "a" and "an"
+  let article = 'a';
+  if (vowels.indexOf(isms.charAt(0)) !== -1) {
+    // If so, assume it's plural (this is a flawed assumption)
+    article = 'an';
+  }
+
   // Now we can construct our description with a template string
   // We have the basic structure of a sentence and we substitute in the
   // values we've just calculated
-  let description = `${condiment} ${verb} like a ${cat} in a ${room}.`;
-
+  let description = `${isms} with ${condiment} ${verb} like a ${cat} in ${article} ${room}.`;
   // Finally, we add it to the page and hey presto!
   $('body').append(description)
+
+  // Refreshing page by clicking on it
+  $(document).click(function() {
+    location.reload();
+  })
 }
 
 // getRandomElement ()
