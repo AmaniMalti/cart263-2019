@@ -24,7 +24,7 @@ const RELEASE = 0.1;
 // We can get the frequencies of these notes from THE INTERNET, e.g.
 // http://pages.mtu.edu/~suits/notefreqs.html
 let frequencies = [
-  220,246.94,277.18,293.66,329.63,369.99,415.30
+  220, 246.94, 277.18, 293.66, 329.63, 369.99, 415.30
 ];
 // The synth
 let synth;
@@ -36,7 +36,7 @@ let hihat;
 // Each array element is one beat and has a string with each
 // drum to play for that beat
 // x = kick, o = snare, * = hihat
-let pattern = ['x','*','xo*',' ','x','x','xo','*'];
+let pattern = ['x', '*', 'xo*', ' ', 'x', 'x', 'xo', '*'];
 // Which beat of the pattern we're at right now
 let patternIndex = 0;
 let mousePressedStart = true;
@@ -45,7 +45,7 @@ let mousePressedStart = true;
 //
 // Creat canvas, set up the synth and sound files.
 function setup() {
-  createCanvas(windowWidth,windowHeight);
+  createCanvas(windowWidth, windowHeight);
 
 
   // Create the synth
@@ -81,15 +81,15 @@ function setup() {
     }
   });
   var delay = new Pizzicato.Effects.Delay({
-      feedback: 0.8,
-      time: 0.22,
-      mix: 0.75
+    feedback: 0.8,
+    time: 0.22,
+    mix: 0.75
   });
-    synth.addEffect(delay);
-    var distortion = new Pizzicato.Effects.Distortion({
-        gain: 0.4
-    });
-snare.addEffect(delay);
+  synth.addEffect(delay);
+  var distortion = new Pizzicato.Effects.Distortion({
+    gain: 0.4
+  });
+  snare.addEffect(delay);
 }
 
 
@@ -98,14 +98,14 @@ snare.addEffect(delay);
 // Using this to start the note and drum sequences to get around
 // user interaction (and to give the files time to load)
 function mousePressed() {
-  if (mousePressedStart === true){
-  // Start an interval for the notes
-  setInterval(playNote,NOTE_TEMPO);
-  changeNoteDuration();
-  // Start an interval for the drums
-  setInterval(playDrum,DRUM_TEMPO);
-  mousePressedStart= false;
-}
+  if (mousePressedStart === true) {
+    // Start an interval for the notes
+    setInterval(playNote, NOTE_TEMPO);
+    changeNoteDuration();
+    // Start an interval for the drums
+    setInterval(playDrum, DRUM_TEMPO);
+    mousePressedStart = false;
+  }
 }
 
 // playNote
@@ -119,16 +119,16 @@ function playNote() {
   synth.frequency = frequency;
   // If it's note already play, play the synth
   let synthPause = Math.random();
-  if (synthPause > 0.5){
-      synth.play();
-      }
-      else {
-        synth.pause();
-    }
+  if (synthPause > 0.5) {
+    synth.play();
+  } else {
+    synth.pause();
+  }
 }
-  function changeNoteDuration(){
-    let duration = (Math.floor(Math.random()*NOTE_TEMPO))+NOTE_TEMPO;
-    setTimeout(playNote, duration);
+
+function changeNoteDuration() {
+  let duration = (Math.floor(Math.random() * NOTE_TEMPO)) + NOTE_TEMPO;
+  setTimeout(playNote, duration);
 
 }
 
@@ -160,5 +160,4 @@ function playDrum() {
 //
 // Nothing right now.
 
-function draw() {
-}
+function draw() {}
