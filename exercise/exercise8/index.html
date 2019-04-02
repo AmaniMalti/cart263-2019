@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+
+  <!-- CSS stylesheet(s) -->
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+
+  <!-- Libraries -->
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+  <script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous"></script>
+
+  <!-- My script(s) -->
+  <script src="js/script.js"></script>
+   <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
+</head>
+
+<body>
+  <!-- HTML would go here if needed. -->
+  <a-scene>
+    <a-assets>
+      <img id="baby-image" src="./assets/images/baby.png">
+    </a-assets>
+    <a-sky color="pink"></a-sky>
+
+      <!-- Using the asset management system. -->
+      <a-curvedimage src="#baby-image" height="3.0" radius="5.7" theta-length="72"
+                     rotation="0 100 0" scale="0.8 0.8 0.8"></a-curvedimage>
+    </a-scene>
+</body>
+
+</html>
