@@ -7,7 +7,7 @@ TODO: Add description of game
 ******************/
 
 // initialize variables used for three js 3D rendering
-var container, camera, controls, scene, renderer;
+var container, camera, controls, scene, renderer, startOverlay;
 
 // call the setup function
 setup();
@@ -19,6 +19,9 @@ function setup() {
   // create a new div which will be contained in the body html tag
   container = document.createElement('div');
   document.body.appendChild(container);
+
+  // calling adding the add start overlay function
+  addStartOverlay();
 
   // Setup for the camera in a 3D perspective
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.35, 5000);
@@ -87,10 +90,23 @@ function setup() {
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.gammaOutput = true;
-  // add rendering element to the div container
+  // add render element to the div container
   container.appendChild(renderer.domElement);
   // set up an event listener on window resize, call the resize function
   window.addEventListener('resize', onWindowResize, false);
+
+  // use responsive voice to give instructions on how to win the game
+  responsiveVoice.speak("Baby is hungry. In this game, you must feed the baby by dragging the spheres on the baby.", "UK English Female");
+
+  // when click on overlay, hide the start overlay
+  var startOverlay = $('.start');
+  startOverlay.click(
+    function() {
+      startOverlay.hide();
+    }
+  );
+
+
 }
 
 // window resizing function
@@ -99,6 +115,16 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function addStartOverlay() {
+  // Adding start overlay with text
+  startOverlay = document.createElement('div');
+  startOverlay.setAttribute('class', 'start');
+  var h1 = document.createElement("H1");
+   h1.innerHTML = "Start Game - Click to start";
+   startOverlay.appendChild(h1);
+   document.body.appendChild(startOverlay);
 }
 
 // three js animate function

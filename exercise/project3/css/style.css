@@ -3,3 +3,43 @@
 This is the style file for this project.
 
 **********************************************/
+body {
+  font-family: Monospace;
+  background-color: #f0f0f0;
+  margin: 0px;
+  overflow: hidden;
+}
+
+.instruction {
+   position: absolute;
+   background-color: #613b3b59;
+}
+
+.instruction h3 {
+  padding-left: 10px;
+}
+
+.instruction li {
+  list-style: none;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.start {
+  position: absolute;
+  background-color: #62922f59;
+  cursor: pointer;
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+}
+
+.start h1 {
+  position: fixed;
+  top: 50%;
+  left: 36%;
+}
