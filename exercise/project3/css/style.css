@@ -61,7 +61,7 @@ body {
 .winner h1 {
   position: fixed;
   top: 50%;
-  left: 40%;
+  left: 45%;
 }
 
 .gameOver {
@@ -80,5 +80,5 @@ body {
 .gameOver h1 {
   position: fixed;
   top: 50%;
-  left: 40%;
+  left: 45%;
 }

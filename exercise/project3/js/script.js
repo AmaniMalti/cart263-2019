@@ -7,7 +7,23 @@ TODO: Add description of game
 ******************/
 
 // initialize variables used for three js 3D rendering
-var container, camera, controls, scene, renderer, startOverlay, gameOverOverlay, winnerOverlay;
+var container, camera, controls, scene, renderer, startOverlay, gameOverOverlay, winnerOverlay, rayCaster;
+
+// 3D objects that will be draggable
+var objects = [];
+// Array will hold 3D baby object
+var babyObject = [];
+// Array that holds all food objects - all spheres
+var foodObject = [];
+// variable to keep track of number of times baby was fed a toy to check
+// for game over condition
+var toyFed = 0;
+// initialize gameOver variable to false
+var gameOver = false;
+// initialize won variable to false
+var won = false;
+// initialize mouse variable as a THREE vector of 2 dimentions
+var mouse = new THREE.Vector2();
 
 // call the setup function
 setup();
@@ -78,6 +94,51 @@ function setup() {
       scene.add(gltf.scene);
     });
 
+    // setup the spheres, 10 in total
+    var sphereGeometry = new THREE.SphereGeometry(40, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
+    for (var i = 0; i < 10; i++) {
+      var material = new THREE.MeshLambertMaterial({
+        // give each a random color
+        color: Math.random() * 0xffffff
+      });
+      // create a new sphere
+      var sphere = new THREE.Mesh(sphereGeometry, material);
+      // set the position as random
+      sphere.position.set(Math.random() * 1000 - 500, Math.random() * 600 - 300, Math.random() * 800 - 400);
+      // add created sphere to the scene
+      scene.add(sphere);
+      // add sphere to objects array
+      objects.push(sphere);
+      // add sphere object to food object array
+      foodObject.push(sphere);
+    }
+
+    // set up the rectangles, 20 in total
+    var geometry = new THREE.BoxBufferGeometry(40, 40, 40);
+    for (var i = 0; i < 20; i++) {
+      var toy = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
+        // give each a random color
+        color: Math.random() * 0xffffff
+      }));
+      // set position as random
+      toy.position.set(Math.random() * 1000 - 600, Math.random() * 600 - 200, Math.random() * 800 - 300);
+      // set rotation as random
+      toy.rotation.x = Math.random() * 2 * Math.PI;
+      toy.rotation.y = Math.random() * 2 * Math.PI;
+      toy.rotation.z = Math.random() * 2 * Math.PI;
+      // set scale as random
+      toy.scale.x = Math.random() * 2 + 1;
+      toy.scale.y = Math.random() * 2 + 1;
+      toy.scale.z = Math.random() * 2 + 1;
+      // give and receive shadow
+      toy.castShadow = true;
+      toy.receiveShadow = true;
+      // add rectangle to the scene
+      scene.add(toy);
+      // add rectangle to objects array
+      objects.push(toy);
+    }
+
     // generate the background
     pmremGenerator.dispose();
     pmremCubeUVPacker.dispose();
@@ -97,6 +158,21 @@ function setup() {
   // set up an event listener on window resize, call the resize function
   window.addEventListener('resize', onWindowResize, false);
 
+  // set up of the three js drag controls
+  var dragControls = new THREE.DragControls(objects, camera, renderer.domElement);
+  // on drag start, don't enable controls
+  dragControls.addEventListener('dragstart', function() {
+    controls.enabled = false;
+  });
+  // on drag end, enbale controls
+  dragControls.addEventListener('dragend', function() {
+    controls.enabled = true;
+  });
+
+  // set up Three js raycaster, this enables to track clicks on 3D objects
+  rayCaster = new THREE.Raycaster();
+  renderer.domElement.addEventListener('click', raycast, false);
+
   // use responsive voice to give instructions on how to win the game
   responsiveVoice.speak("Baby is hungry. In this game, you must feed the baby by dragging the spheres on the baby.", "UK English Female");
 
@@ -107,8 +183,6 @@ function setup() {
       startOverlay.hide();
     }
   );
-
-
 }
 
 // window resizing function
@@ -117,6 +191,47 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+// function that handles click on 3D objects such as the food (spheres) and toys (rectangles)
+function raycast(e) {
+  // set up mouse
+  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  // add mouse to three js rayCaster to be able to track clicks
+  rayCaster.setFromCamera(mouse, camera);
+  //
+  var intersects = rayCaster.intersectObjects(scene.children);
+  if (intersects[0] && intersects[0].object) {
+    var currentObject = intersects[0].object;
+    if (currentObject.geometry.type == "SphereGeometry") {
+      if (currentObject.position.x <= 200 && currentObject.position.x >= -200 && currentObject.position.y <= 200 && currentObject.position.y >= -200 && currentObject.position.z <= 200 && currentObject.position.z >= -200) {
+        var sphereObject = intersects[0].object;
+        responsiveVoice.speak("Good job! You fed the baby.", "UK English Female");
+        let babyBurp = new Audio("assets/sounds/babyLaugh.wav");
+        babyBurp.play();
+        scene.remove(intersects[0].object);
+        foodObject.pop(intersects[0].object);
+        if (foodObject.length == 0) {
+          won = true;
+          responsiveVoice.speak("Hurray! Baby ate all the food! You won the game.", "UK English Female");
+        }
+      } else {
+        responsiveVoice.speak("Food must be placed on baby, otherwise he won't be able to eat it.", "UK English Female");
+      }
+    } else {
+      if (currentObject.position.x <= 200 && currentObject.position.x >= -200 && currentObject.position.y <= 200 && currentObject.position.y >= -200 && currentObject.position.z <= 200 && currentObject.position.z >= -200) {
+        responsiveVoice.speak("Not a food object. Baby is upset!", "UK English Female");
+        toyFed++;
+        let babyCry = new Audio("assets/sounds/cry.wav");
+        babyCry.play();
+        if (toyFed > 2) {
+          gameOver = true;
+          responsiveVoice.speak("Game over. You are a bad babysitter!", "UK English Female");
+        }
+      }
+    }
+  }
 }
 
 //
@@ -160,4 +275,12 @@ function animate() {
 function render() {
   controls.update();
   renderer.render(scene, camera);
+  // check if game is over and show gameOver overlay if true
+  if (gameOver) {
+    $('.gameOver').show();
+  }
+  // check if winner and show winner overlay if true
+  if (won) {
+    $('.winner').show();
+  }
 }
