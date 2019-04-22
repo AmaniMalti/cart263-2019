@@ -13,11 +13,11 @@ var container, camera, controls, scene, renderer, startOverlay, gameOverOverlay,
 var objects = [];
 // Array will hold 3D baby object
 var babyObject = [];
-// Array that holds all food objects - all spheres
-var foodObject = [];
-// variable to keep track of number of times baby was fed a toy to check
+// Array that holds all safeToy objects - all spheres
+var safeToyObject = [];
+// variable to keep track of number of times baby played with a toy to check
 // for game over condition
-var toyFed = 0;
+var toyPlay = 0;
 // initialize gameOver variable to false
 var gameOver = false;
 // initialize won variable to false
@@ -109,8 +109,8 @@ function setup() {
       scene.add(sphere);
       // add sphere to objects array
       objects.push(sphere);
-      // add sphere object to food object array
-      foodObject.push(sphere);
+      // add sphere object to safeToy object array
+      safeToyObject.push(sphere);
     }
 
     // set up the rectangles, 20 in total
@@ -174,7 +174,7 @@ function setup() {
   renderer.domElement.addEventListener('click', raycast, false);
 
   // use responsive voice to give instructions on how to win the game
-  responsiveVoice.speak("Baby is hungry. In this game, you must feed the baby by dragging the spheres on the baby.", "UK English Female");
+  responsiveVoice.speak("Baby is bored. In this game, you must entertain the baby by dragging the spheres on the baby. Rectangular toys are dangerous for baby.", "UK English Female");
 
   // when click on overlay, hide the start overlay
   var startOverlay = $('.start');
@@ -193,7 +193,7 @@ function onWindowResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-// function that handles click on 3D objects such as the food (spheres) and toys (rectangles)
+// function that handles click on 3D objects such as the safeToy (spheres) and toys (rectangles)
 function raycast(e) {
   // set up mouse
   mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -207,25 +207,25 @@ function raycast(e) {
     if (currentObject.geometry.type == "SphereGeometry") {
       if (currentObject.position.x <= 200 && currentObject.position.x >= -200 && currentObject.position.y <= 200 && currentObject.position.y >= -200 && currentObject.position.z <= 200 && currentObject.position.z >= -200) {
         var sphereObject = intersects[0].object;
-        responsiveVoice.speak("Good job! You fed the baby.", "UK English Female");
+        responsiveVoice.speak("Good job! You entertained the baby.", "UK English Female");
         let babyBurp = new Audio("assets/sounds/babyLaugh.wav");
         babyBurp.play();
         scene.remove(intersects[0].object);
-        foodObject.pop(intersects[0].object);
-        if (foodObject.length == 0) {
+        safeToyObject.pop(intersects[0].object);
+        if (safeToyObject.length == 0) {
           won = true;
-          responsiveVoice.speak("Hurray! Baby ate all the food! You won the game.", "UK English Female");
+          responsiveVoice.speak("Hurray! Baby played with all the toys! You won the game.", "UK English Female");
         }
       } else {
-        responsiveVoice.speak("Food must be placed on baby, otherwise he won't be able to eat it.", "UK English Female");
+        responsiveVoice.speak("Safe toy must be placed on baby, otherwise he won't be able to play with it.", "UK English Female");
       }
     } else {
       if (currentObject.position.x <= 200 && currentObject.position.x >= -200 && currentObject.position.y <= 200 && currentObject.position.y >= -200 && currentObject.position.z <= 200 && currentObject.position.z >= -200) {
-        responsiveVoice.speak("Not a food object. Baby is upset!", "UK English Female");
-        toyFed++;
+        responsiveVoice.speak("Not a safe toy object. Baby is upset!", "UK English Female");
+        toyPlay++;
         let babyCry = new Audio("assets/sounds/cry.wav");
         babyCry.play();
-        if (toyFed > 2) {
+        if (toyPlay > 2) {
           gameOver = true;
           responsiveVoice.speak("Game over. You are a bad babysitter!", "UK English Female");
         }
