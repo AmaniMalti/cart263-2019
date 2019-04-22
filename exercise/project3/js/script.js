@@ -173,9 +173,6 @@ function setup() {
   rayCaster = new THREE.Raycaster();
   renderer.domElement.addEventListener('click', raycast, false);
 
-  // use responsive voice to give instructions on how to win the game
-  responsiveVoice.speak("Baby is bored. In this game, you must entertain the baby by dragging the spheres on the baby. Rectangular toys are dangerous for baby.", "UK English Female");
-
   // when click on overlay, hide the start overlay
   var startOverlay = $('.start');
   startOverlay.click(
@@ -184,6 +181,11 @@ function setup() {
     }
   );
 }
+
+// speak instructions when page is loaded
+$(document).ready(function() {
+  responsiveVoice.speak("Baby is bored. In this game, you must entertain the baby by dragging the spheres on the baby. Rectangular toys are dangerous for baby.", "UK English Female");
+});
 
 // window resizing function
 function onWindowResize() {
