@@ -7,7 +7,7 @@ TODO: Add description of game
 ******************/
 
 // initialize variables used for three js 3D rendering
-var container, camera, controls, scene, renderer, startOverlay;
+var container, camera, controls, scene, renderer, startOverlay, gameOverOverlay, winnerOverlay;
 
 // call the setup function
 setup();
@@ -22,6 +22,8 @@ function setup() {
 
   // calling adding the add start overlay function
   addStartOverlay();
+  addGameOverOverlay();
+  addWinnerOverlay();
 
   // Setup for the camera in a 3D perspective
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.35, 5000);
@@ -117,14 +119,35 @@ function onWindowResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+//
 function addStartOverlay() {
   // Adding start overlay with text
   startOverlay = document.createElement('div');
   startOverlay.setAttribute('class', 'start');
   var h1 = document.createElement("H1");
-   h1.innerHTML = "Start Game - Click to start";
-   startOverlay.appendChild(h1);
-   document.body.appendChild(startOverlay);
+  h1.innerHTML = "Start Game - Click to start";
+  startOverlay.appendChild(h1);
+  document.body.appendChild(startOverlay);
+}
+
+// overlay setup for when game is over
+function addGameOverOverlay() {
+  gameOverOverlay = document.createElement('div');
+  gameOverOverlay.setAttribute('class', 'gameOver');
+  var h1 = document.createElement("H1");
+  h1.innerHTML = "Game Over!";
+  gameOverOverlay.appendChild(h1);
+  document.body.appendChild(gameOverOverlay);
+}
+
+// overlay setup for when game is won
+function addWinnerOverlay() {
+  winnerOverlay = document.createElement('div');
+  winnerOverlay.setAttribute('class', 'winner');
+  var h1 = document.createElement("H1");
+  h1.innerHTML = "You won!";
+  winnerOverlay.appendChild(h1);
+  document.body.appendChild(winnerOverlay);
 }
 
 // three js animate function

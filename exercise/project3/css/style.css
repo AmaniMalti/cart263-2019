@@ -43,3 +43,42 @@ body {
   top: 50%;
   left: 36%;
 }
+
+.winner {
+  position: absolute;
+  background-color: #62922f59;
+  cursor: pointer;
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: none;
+}
+
+.winner h1 {
+  position: fixed;
+  top: 50%;
+  left: 40%;
+}
+
+.gameOver {
+  position: absolute;
+  background-color: #b51b1b59;
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: none;
+}
+
+.gameOver h1 {
+  position: fixed;
+  top: 50%;
+  left: 40%;
+}
